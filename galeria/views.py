@@ -1,8 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
+from galeria.models import Fotografia
 
 
 def index(request):
-    return render(request, 'galeria/index.html')
+    fotografia = Fotografia.objects.order_by("date_fotografia").filter(visible=True)
 
-def imagem(request):
-    return render(request, 'galeria/imagem.html')
+    return render(request, 'galeria/index.html', {"cards":fotografia})
+
+def imagem(request, foto_id):
+    fotografia = get_object_or_404(Fotografia, pk=foto_id)
+    return render(request, 'galeria/imagem.html', {"fotografia": fotografia})
